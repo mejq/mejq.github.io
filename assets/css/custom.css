@@ -4,6 +4,9 @@
 .home-hero {
   background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
   color: #e0fffa;
+  /* increase top/bottom padding to give the hero more breathing room */
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 .home-hero .btn-primary {
@@ -18,6 +21,11 @@
 /* Feature icons color */
 .home-hero + .container .fas {
   color: #00cec9;
+}
+
+/* Add extra spacing between hero and following section */
+.home-hero + .container {
+  margin-top: 3rem;
 }
 
 /* Post cards: dark theme accent */
@@ -40,6 +48,12 @@ a:hover {
 /* Sidebar customization */
 #sidebar {
   background-color: #121212;
+}
+
+/* Provide more vertical separation between major homepage blocks */
+.container {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 #sidebar .site-title,
 #sidebar .site-subtitle {
