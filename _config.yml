@@ -89,6 +89,12 @@ pageviews:
 #
 theme_mode: dark # [light | dark]
 
+# plugins used by the site. chirpy theme gem will also load its own defaults.
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-archives
+
 # The CDN endpoint for media resources.
 # Notice that once it is assigned, the CDN url
 # will be added to all media resources (site avatar, posts' images, audio and video files) paths starting with '/'
