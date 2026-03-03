@@ -1,4 +1,6 @@
-# Chirpy Starter
+# My Cybersecurity Blog
+
+This repository hosts a personal cybersecurity blog built using the **Chirpy** Jekyll theme. Content focuses on security tutorials, lab walkthroughs, and informative articles intended for academic and ethical use.
 
 [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
 [![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
@@ -25,9 +27,16 @@ Jekyll site. The following is a list of targets:
 To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
 latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
 
-## Usage
+## Getting Started
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+1. **Install dependencies**: run `bundle install` in the project directory.
+2. **Write posts**: create Markdown files under `_posts/` with appropriate front matter.
+3. **Run locally**: `./tools/run.sh` (or `bundle exec jekyll serve`) to start a development server.
+4. **Build for production**: `./tools/test.sh` will generate the static site in `_site`.
+
+The `index.html` file is mostly empty since the custom home layout (`_layouts/home.html`) provides the landing‑page content. Update styles in `assets/css/custom.css`.
+
+See [theme docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki) for additional configuration options.
 
 ## Contributing
 

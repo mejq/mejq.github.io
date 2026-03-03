@@ -1,0 +1,62 @@
+/* custom styles for cybersecurity theme */
+
+/* Hero section darker background */
+.home-hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  color: #e0fffa;
+}
+
+.home-hero .btn-primary {
+  background-color: #00b894;
+  border-color: #00b894;
+}
+.home-hero .btn-outline-secondary {
+  color: #e0fffa;
+  border-color: #e0fffa;
+}
+
+/* Feature icons color */
+.home-hero + .container .fas {
+  color: #00cec9;
+}
+
+/* Post cards: dark theme accent */
+.card {
+  border: 1px solid #2d3436;
+}
+.card-title {
+  color: #00b894;
+}
+
+/* Global link color */
+a {
+  color: #00b894;
+}
+
+a:hover {
+  color: #00cec9;
+}
+
+/* Sidebar customization */
+#sidebar {
+  background-color: #121212;
+}
+#sidebar .site-title,
+#sidebar .site-subtitle {
+  color: #e0fffa;
+}
+
+/* Footer tweaks */
+footer a {
+  color: #00b894;
+}
+
+/* Badges for categories/tags preview */
+.badge {
+  font-size: 0.9rem;
+  padding: 0.4em 0.6em;
+}
+.tag-cloud .badge {
+  background-color: #1e272e;
+  color: #00b894;
+}
