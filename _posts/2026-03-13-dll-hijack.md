@@ -1,3 +1,12 @@
+---
+layout: post
+title: "Understanding DLL Hijacking: A Deep Dive into Insecure Library Loading"
+date: 2026-03-13
+categories: [windows-security]
+---
+
+
+
 # Understanding DLL Hijacking: A Deep Dive into Insecure Library Loading
 
 In the Windows operating system, Dynamic Link Libraries (DLLs) are essential components that allow multiple applications to share code and resources. However, the way applications load these DLLs can sometimes open the door to a severe security vulnerability known as **DLL Hijacking** (or Insecure Library Loading).
@@ -25,6 +34,7 @@ To resolve this, Windows relies on a predefined sequence called the **DLL Search
 
 **The Vulnerability:** If an attacker can place a malicious DLL with the expected name in a directory that is searched _before_ the legitimate DLL's location, the application will load the attacker's code instead.
 
+
 ## Anatomy of a Vulnerable Service
 
 Let's examine a real-world scenario using a custom Windows service named `EuroSky_InventorySync`.
@@ -33,7 +43,7 @@ Let's examine a real-world scenario using a custom Windows service named `EuroSk
 
 Below is a snippet of the service's C++ code, specifically the function responsible for initializing a plugin:
 
-```
+```c
 // Vulnerable function that attempts to load a DLL without specifying a full path.
 void InitializeSyncPlugin() {
 
@@ -52,7 +62,6 @@ void InitializeSyncPlugin() {
     } 
     // ... error handling omitted for brevity
 }
-
 ```
 
 ### Why is this vulnerable?
@@ -60,6 +69,8 @@ void InitializeSyncPlugin() {
 The critical error lies in this line: `LoadLibraryA("inventory_helper_ext.dll");`.
 
 Because the developer used a relative path, the service relies on the Windows DLL Search Order. Since Windows services typically run under the highly privileged `NT AUTHORITY\SYSTEM` account, whatever code is loaded by `LoadLibraryA` will execute with those same maximum privileges.
+
+
 
 ## The Exploit: Privilege Escalation in Action
 
@@ -75,7 +86,8 @@ For an attacker to exploit this, two conditions must be met:
 An attacker can write a custom DLL that exports the exact function the service is looking for (`StartSync`). However, instead of performing an inventory sync, the attacker writes code to escalate their privileges.
 
 Here is an example of what that malicious DLL might look like:
-```
+
+```c++
 #include <windows.h>
 #include <lm.h>
 #include <stdio.h>
@@ -100,13 +112,16 @@ extern "C" __declspec(dllexport) void StartSync() {
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
     return TRUE; 
 }
+
 ```
 
 ### 2. Planting the DLL
 
 If the installation directory (`C:\Program Files\EuroSky\bin\`) has weak permissions that allow standard users to write to it, the attacker simply copies their crafted DLL into that folder:
 
-```
+
+
+```dos
 copy C:\Users\bob\Desktop\inventory_helper_ext.dll "C:\Program Files\EuroSky\bin\"
 ```
 
@@ -114,7 +129,8 @@ copy C:\Users\bob\Desktop\inventory_helper_ext.dll "C:\Program Files\EuroSky\bin
 
 To execute the payload, the service needs to be forced to load the DLL. This happens when the service starts. The attacker executes:
 
-```
+
+```dos
 net stop EuroSky_InventorySync
 net start EuroSky_InventorySync
 ```
@@ -122,6 +138,7 @@ net start EuroSky_InventorySync
 _(Note: Stopping/starting services usually requires admin rights, but the service might restart automatically on reboot, or crash and auto-restart)._
 
 When the service boots up, it checks its own `bin` directory first. It finds the attacker's `inventory_helper_ext.dll`, loads it into memory as `NT AUTHORITY\SYSTEM`, and executes the `StartSync()` function. Instantly, the standard user "bob" is added to the local Administrators group.
+
 
 
 ## How to Prevent DLL Hijacking
@@ -135,18 +152,14 @@ The most effective way to prevent this vulnerability at the code level is to har
 **Vulnerable:**
 
 
-```
+```c
 HINSTANCE hPlugin = LoadLibraryA("inventory_helper_ext.dll");
-
 ```
 
 **Secure:**
 
-
-
-```
+```c
 HINSTANCE hPlugin = LoadLibraryA("C:\\Program Files\\EuroSky\\bin\\plugins\\inventory_helper_ext.dll");
-
 ```
 
 ### 2. Restrict Directory Permissions
@@ -160,3 +173,4 @@ Modern Windows development offers APIs designed to restrict where DLLs can be lo
 ----------
 
 _Understanding how threat actors abuse standard operating system features is the first step in writing resilient, secure software. Always sanitize your inputs, restrict your file paths, and audit your folder permissions._
+
